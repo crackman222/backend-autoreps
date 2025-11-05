@@ -1,10 +1,12 @@
 import express from "express";
 import prisma from "../prisma.js";
+import auth from "../middleware/auth.js";
+
 const router = express.Router();
 
 // Add workout session
-router.post("/:id", async (req, res) => {
-  const userId = parseInt(req.params.id);
+router.post("/", auth, async (req, res) => {
+  const userId = req.user.id;
   const { reps, validReps, invalidReps, durationSec } = req.body;
 
   const session = await prisma.workoutSession.create({
@@ -14,9 +16,9 @@ router.post("/:id", async (req, res) => {
   res.json(session);
 });
 
-// Get all sessions for analytics
-router.get("/:id", async (req, res) => {
-  const userId = parseInt(req.params.id);
+// Get user's history
+router.get("/", auth, async (req, res) => {
+  const userId = req.user.id;
   const sessions = await prisma.workoutSession.findMany({
     where: { userId },
     orderBy: { date: "desc" },

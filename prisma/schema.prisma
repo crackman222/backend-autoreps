@@ -53,3 +53,13 @@ model TrainingPlan {
 
   user User @relation(fields: [userId], references: [id])
 }
+
+model UserStreak {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  currentStreak Int   @default(0)
+  longestStreak Int   @default(0)
+  lastWorkout DateTime?
+  
+  user      User @relation(fields: [userId], references: [id])
+}
