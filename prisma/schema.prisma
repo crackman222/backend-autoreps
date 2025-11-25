@@ -4,7 +4,7 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js",
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "windows", "debian-openssl-3.0.x"]
 }
 
@@ -17,6 +17,7 @@ model User {
   plan           TrainingPlan?
   createdAt      DateTime         @default(now())
   WorkoutSession WorkoutSession[]
+  UserStreak     UserStreak[]
 }
 
 model WorkoutSession {
@@ -56,11 +57,11 @@ model TrainingPlan {
 }
 
 model UserStreak {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  currentStreak Int   @default(0)
-  longestStreak Int   @default(0)
-  lastWorkout DateTime?
-  
-  user      User @relation(fields: [userId], references: [id])
+  id            Int       @id @default(autoincrement())
+  userId        Int
+  currentStreak Int       @default(0)
+  longestStreak Int       @default(0)
+  lastWorkout   DateTime?
+
+  user User @relation(fields: [userId], references: [id])
 }
