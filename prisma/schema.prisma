@@ -67,3 +67,12 @@ model UserStreak {
   user User @relation(fields: [userId], references: [id])
 }
 
+model TokenBlacklist {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([token])
+  @@index([expiresAt])
+}

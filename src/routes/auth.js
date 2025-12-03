@@ -32,4 +32,31 @@ router.post("/login", async (req, res) => {
   res.json({ token, user });
 });
 
+// LOGOUT
+router.post("/logout", async (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+
+  try {
+    // Decode token to get expiration time
+    const decoded = jwt.decode(token);
+    const expiresAt = new Date(decoded.exp * 1000);
+
+    // Add token to blacklist
+    await prisma.tokenBlacklist.create({
+      data: {
+        token,
+        expiresAt,
+      },
+    });
+
+    res.json({ message: "Logged out successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Logout failed" });
+  }
+});
+
 export default router;
